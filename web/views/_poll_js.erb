@@ -1,5 +1,5 @@
-<% if current_path != '' && params[:poll] %>
+<% if current_path != '' && params[:poll] == 'true' %>
   <script>
-    updatePage('<%= root_path + current_path %>')
+    updatePage('<%= link_to(current_path) %>')
   </script>
 <% end %>

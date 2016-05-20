@@ -1,7 +1,7 @@
 <% if current_path != '' %>
-  <% if params[:poll] %>
-    <a id="live-poll" class="btn btn-primary active" href="<%= root_path + current_path %>"><%= t('StopPolling') %></a>
+  <% if params[:poll] == 'true' %>
+    <a id="live-poll" class="btn btn-primary active" href="<%= link_to(current_path, 'poll' => false) %>"><%= t('StopPolling') %></a>
   <% else %>
-    <a id="live-poll" class="btn btn-primary" href="<%= root_path + current_path %>?<%= qparams(poll: true) %>"><%= t('LivePoll') %></a>
+    <a id="live-poll" class="btn btn-primary" href="<%= link_to(current_path, 'poll' => true) %>"><%= t('LivePoll') %></a>
   <% end %>
 <% end %>

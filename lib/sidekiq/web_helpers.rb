@@ -154,7 +154,7 @@ module Sidekiq
     SAFE_QPARAMS = %w(page poll)
 
     # Merge options with current params, filter safe params, and stringify to query string
-    def qparams(options)
+    def qparams(options = {})
       options = options.stringify_keys
       params.merge(options).map do |key, value|
         SAFE_QPARAMS.include?(key) ? "#{key}=#{value}" : next
@@ -250,6 +250,19 @@ module Sidekiq
         namespace_suffix = namespace == nil ? '' : "##{namespace}"
         "#{redis_connection}#{namespace_suffix}"
       end
+    end
+
+    def link_to(url_fragment, parameters = {})
+      port = request.port unless (request.scheme == 'http' && request.port == 80) || (request.scheme == 'https' && request.port == 443)
+      parameters = params.merge(parameters)
+
+      uri        = URI::HTTP.build(host: request.host)
+      uri.scheme = request.scheme
+      uri.port   = port if port
+      uri.path   = "#{request.script_name}/"
+      uri        = URI.join(uri, url_fragment)
+      uri.query  = URI.encode_www_form(parameters) if parameters
+      uri.to_s
     end
   end
 end
